@@ -1,4 +1,3 @@
-
 # syntax=docker/dockerfile:1
 
 # 1. Use a lightweight Python image
@@ -21,7 +20,6 @@ COPY main.py .
 COPY download_model.py .
 
 # 6. Download the latest trained model from DagsHub
-# The token is securely provided using Docker BuildKit secrets
 RUN --mount=type=secret,id=dagshub_token,required=true \
     MLFLOW_TRACKING_USERNAME=Abdel380 \
     MLFLOW_TRACKING_PASSWORD="$(cat /run/secrets/dagshub_token)" \
