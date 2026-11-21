@@ -1,33 +1,34 @@
 
 # syntax=docker/dockerfile:1
 
-# 1. Use a Python base image
+# 1. Use a lightweight Python image
 FROM python:3.13-slim
 
-# 2. Set working directory
+# 2. Set the working directory
 WORKDIR /app
 
 # 3. Configure Python
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# 4. Install dependencies
+# 4. Install Python dependencies
 COPY requirements.txt .
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. Copy application files
+# 5. Copy FastAPI application and MLflow download script
 COPY main.py .
 COPY download_model.py .
 
-# 6. Download the latest model from DagsHub
-# The token is provided securely during the build
-RUN --mount=type=secret,unset DAGSHUB_TOKEN=dagshub_token,required=true \
+# 6. Download the latest trained model from DagsHub
+# The token is securely provided using Docker BuildKit secrets
+RUN --mount=type=secret,id=dagshub_token,required=true \
     MLFLOW_TRACKING_USERNAME=Abdel380 \
     MLFLOW_TRACKING_PASSWORD="$(cat /run/secrets/dagshub_token)" \
     python download_model.py
 
-# 7. Expose FastAPI port
+# 7. Expose the FastAPI port
 EXPOSE 8000
 
-# 8. Start FastAPI
+# 8. Start the FastAPI application
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
