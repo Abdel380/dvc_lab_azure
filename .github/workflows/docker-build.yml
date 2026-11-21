@@ -1,0 +1,35 @@
+name: Build FastAPI Docker Image
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Download the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Configure Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Build the Docker image
+      - name: Build Docker image with latest MLflow model
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          no-cache: true
+          tags: digits-api:latest
+          secrets: |
+            dagshub_token=${{ secrets.DAGSHUB_TOKEN }}

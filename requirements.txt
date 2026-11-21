@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+mlflow==3.5.1
+scikit-learn==1.7.2
+skops
+dagshub

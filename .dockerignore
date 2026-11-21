@@ -1,0 +1,12 @@
+.git
+.dvc
+data/
+model/
+mlflow.db
+*.ipynb
+*.pdf
+.env
+.env.*
+__pycache__/
+*.pyc
+.DS_Store

@@ -1,0 +1,7 @@
+model/
+mlflow.db
+.env
+.env.*
+.dvc/config.local
+__pycache__/
+.ipynb_checkpoints/
